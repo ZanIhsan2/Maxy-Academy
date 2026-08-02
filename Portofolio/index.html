@@ -1,0 +1,588 @@
+<!doctype html>
+<html class="scroll-smooth" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Razan Muhammad Ihsan Rismawandi | Portfolio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface": "#191c1e",
+              "surface-tint": "#565e74",
+              secondary: "#4648d4",
+              "secondary-fixed": "#e1e0ff",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed": "#07006c",
+              "on-secondary-container": "#fffbff",
+              "secondary-container": "#6063ee",
+              surface: "#f7f9fb",
+              "outline-variant": "#c6c6cd",
+              "on-surface-variant": "#45464d",
+              "primary-fixed": "#dae2fd",
+              "on-primary-fixed": "#131b2e",
+            },
+            fontFamily: {
+              display: ["Inter"],
+              body: ["Inter"],
+              mono: ["JetBrains Mono"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glass-header {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .fade-in-up {
+        animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .project-card:hover .project-image {
+        transform: scale(1.05);
+      }
+      .btn-press:active {
+        transform: scale(0.98);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed"
+  >
+    <!-- TopNavBar -->
+    <header
+      class="glass-header border-b border-outline-variant/35 sticky top-0 z-50 shadow-sm w-full"
+    >
+      <nav
+        class="flex justify-between items-center h-[72px] w-full px-6 md:px-10 max-w-[1280px] mx-auto"
+      >
+        <a class="font-bold text-xl text-on-surface tracking-tight" href="#">
+          Razan
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a
+            class="text-sm font-medium text-on-surface hover:text-secondary transition-colors"
+            href="#about"
+            >About</a
+          >
+          <a
+            class="text-sm font-medium text-on-surface hover:text-secondary transition-colors"
+            href="#skills"
+            >Skills</a
+          >
+          <a
+            class="text-sm font-medium text-on-surface hover:text-secondary transition-colors"
+            href="#projects"
+            >Projects</a
+          >
+          <a
+            class="text-sm font-medium text-on-surface hover:text-secondary transition-colors"
+            href="#contact"
+            >Contact</a
+          >
+          <a
+            href="https://github.com/ZanIhsan2"
+            target="_blank"
+            class="bg-secondary text-on-secondary px-5 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-secondary-container shadow-sm"
+          >
+            GitHub
+          </a>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button class="md:hidden p-2 text-on-surface">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero Section -->
+      <section
+        class="relative overflow-hidden py-20 md:py-32 px-6 md:px-10 max-w-[1280px] mx-auto"
+      >
+        <div class="fade-in-up flex flex-col md:flex-row items-center gap-12">
+          <div class="flex-1 space-y-6">
+            <div
+              class="inline-flex items-center gap-2 bg-secondary-fixed text-on-secondary-fixed px-4 py-1.5 rounded-full text-xs font-medium"
+            >
+              <span class="relative flex h-2 w-2">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-2 w-2 bg-secondary"
+                ></span>
+              </span>
+              Undergraduate Informatics Engineering Student
+            </div>
+
+            <h1
+              class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight"
+            >
+              Hi, I'm <span class="text-secondary">Razan Muhammad</span> Ihsan
+              Rismawandi
+            </h1>
+
+            <p class="text-lg text-on-surface-variant max-w-xl leading-relaxed">
+              A full-stack web developer and data enthusiast focused on building
+              clean, high-performance applications using React, TypeScript, and
+              Laravel. Passionate about AI, Machine Learning, and modern web
+              architectures.
+            </p>
+
+            <div class="flex flex-wrap gap-4 pt-2">
+              <a
+                class="bg-secondary text-on-secondary px-8 py-3.5 rounded-lg text-sm font-medium transition-all hover:bg-secondary-container flex items-center gap-2 shadow-sm"
+                href="#projects"
+              >
+                View My Work
+                <span class="material-symbols-outlined text-[20px]"
+                  >arrow_forward</span
+                >
+              </a>
+              <a
+                class="border border-outline-variant text-on-surface px-8 py-3.5 rounded-lg text-sm font-medium transition-all hover:bg-surface-container flex items-center gap-2"
+                href="#contact"
+              >
+                Get In Touch
+              </a>
+            </div>
+          </div>
+
+          <div class="flex-1 w-full max-w-[450px] relative">
+            <div
+              class="aspect-square bg-white border border-outline-variant p-4 rounded-2xl shadow-xl rotate-2 relative z-10 overflow-hidden"
+            >
+              <div
+                class="w-full h-full bg-surface-container rounded-xl flex flex-col items-center justify-center p-6 text-center border border-outline-variant/40"
+              >
+                <span
+                  class="material-symbols-outlined text-[64px] text-secondary mb-4"
+                  >code</span
+                >
+                <p class="font-mono text-xs text-on-surface-variant mb-1">
+                  // Full-Stack Developer
+                </p>
+                <h3 class="font-bold text-lg text-on-surface">
+                  React • Laravel • TypeScript
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-4">
+                  "Late-night coding with lo-fi beats."
+                </p>
+              </div>
+            </div>
+            <div
+              class="absolute inset-0 bg-secondary-fixed/40 blur-3xl -z-10 rounded-full translate-x-8 translate-y-8"
+            ></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Me Section -->
+      <section class="bg-white py-24 px-6 md:px-10" id="about">
+        <div class="max-w-[1280px] mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-5">
+              <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+                Bridging Academic Logic with Real-World Code.
+              </h2>
+              <div class="w-20 h-1.5 bg-secondary rounded-full"></div>
+            </div>
+            <div class="md:col-span-7 space-y-4">
+              <p class="text-lg text-on-surface-variant leading-relaxed">
+                Currently in my fourth semester as an Informatics Engineering
+                student, I combine rigorous academic foundations in data
+                structures and systems analysis with hands-on full-stack
+                development experience.
+              </p>
+              <p class="text-lg text-on-surface-variant leading-relaxed">
+                Whether I'm developing multi-role workshop management systems,
+                company profile platforms, or exploring image processing
+                techniques and AI/ML workflows, I strive for clean,
+                maintainable, and premium digital experiences.
+              </p>
+
+              <div class="grid grid-cols-2 gap-4 pt-6">
+                <div
+                  class="p-6 bg-surface rounded-xl border border-outline-variant/30"
+                >
+                  <h4 class="text-2xl font-bold text-secondary mb-1">3.70</h4>
+                  <p class="text-sm text-on-surface-variant font-medium">
+                    Semester GPA (IPS)
+                  </p>
+                </div>
+                <div
+                  class="p-6 bg-surface rounded-xl border border-outline-variant/30"
+                >
+                  <h4 class="text-2xl font-bold text-secondary mb-1">15+</h4>
+                  <p class="text-sm text-on-surface-variant font-medium">
+                    Projects & Modules Built
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section class="py-24 px-6 md:px-10 max-w-[1280px] mx-auto" id="skills">
+        <div class="text-center mb-16">
+          <p
+            class="text-xs font-mono uppercase tracking-widest text-secondary mb-2"
+          >
+            Capabilities
+          </p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
+            Technical Arsenal
+          </h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div
+            class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined">terminal</span>
+            </div>
+            <span class="font-medium text-sm">React & TypeScript</span>
+          </div>
+          <div
+            class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined">dns</span>
+            </div>
+            <span class="font-medium text-sm">Laravel & PHP</span>
+          </div>
+          <div
+            class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined">palette</span>
+            </div>
+            <span class="font-medium text-sm">Tailwind CSS</span>
+          </div>
+          <div
+            class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined">psychology</span>
+            </div>
+            <span class="font-medium text-sm">AI / Machine Learning</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section class="bg-white py-24 px-6 md:px-10" id="projects">
+        <div class="max-w-[1280px] mx-auto">
+          <div class="flex justify-between items-end mb-16">
+            <div>
+              <p
+                class="text-xs font-mono uppercase tracking-widest text-secondary mb-2"
+              >
+                Selected Work
+              </p>
+              <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
+                Featured Projects
+              </h2>
+            </div>
+            <a
+              class="hidden md:flex items-center gap-2 text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors"
+              href="https://github.com/ZanIhsan2"
+              target="_blank"
+            >
+              View GitHub Profile
+              <span class="material-symbols-outlined">open_in_new</span>
+            </a>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Card1 -->
+            <div
+              class="project-card group cursor-pointer flex flex-col justify-between"
+            >
+              <div>
+                <div
+                  class="relative overflow-hidden rounded-xl border border-outline-variant bg-surface aspect-video mb-6"
+                >
+                  <img
+                    src="assets/bengkel.png"
+                    alt="Motorcycle Workshop System Preview"
+                    class="w-full h-full object-cover project-image transition-transform duration-500"
+                  />
+                </div>
+                <div class="space-y-3">
+                  <div class="flex gap-2">
+                    <span
+                      class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium"
+                      >Laravel</span
+                    >
+                    <span
+                      class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium"
+                      >MySQL</span
+                    >
+                    <span
+                      class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium"
+                      >Tailwind</span
+                    >
+                  </div>
+                  <h3 class="text-xl font-bold">
+                    Workshop Management Platform
+                  </h3>
+                  <p class="text-on-surface-variant text-sm leading-relaxed">
+                    Developed comprehensive multi-role dashboards for
+                    administrators and users, managing service records,
+                    structural database migrations, and optimized backend
+                    endpoints.
+                  </p>
+                </div>
+              </div>
+              <!-- Link Preview -->
+              <div class="pt-6">
+                <a
+                  href="URL_LINK_HOSTING"
+                  target="_blank"
+                  class="inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-secondary-container transition-colors"
+                >
+                  <span>Live Preview</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    >open_in_new</span
+                  >
+                </a>
+              </div>
+            </div>
+
+            <!-- Card2 -->
+            <div
+              class="project-card group cursor-pointer flex flex-col justify-between"
+            >
+              <div>
+                <div
+                  class="relative overflow-hidden rounded-xl border border-outline-variant bg-surface aspect-video mb-6"
+                >
+                  <img
+                    src="assets/sts.png"
+                    alt="PT. San Teknik Solusi Preview"
+                    class="w-full h-full object-cover project-image transition-transform duration-500"
+                  />
+                </div>
+                <div class="space-y-3">
+                  <div class="flex gap-2">
+                    <span
+                      class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium"
+                      >React</span
+                    >
+                    <span
+                      class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium"
+                      >Tailwind CSS</span
+                    >
+                  </div>
+                  <h3 class="text-xl font-bold">Company Profile Web App</h3>
+                  <p class="text-on-surface-variant text-sm leading-relaxed">
+                    Successfully designed, built, and deployed a modern
+                    corporate profile website featuring responsive layouts,
+                    clean technical documentation sections, and optimized
+                    frontend assets.
+                  </p>
+                </div>
+              </div>
+              <!-- Link Preview -->
+              <div class="pt-6">
+                <a
+                  href="https://www.santekniksolusi.com/"
+                  target="_blank"
+                  class="inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-secondary-container transition-colors"
+                >
+                  <span>Live Preview</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    >open_in_new</span
+                  >
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="py-24 px-6 md:px-10 max-w-[1280px] mx-auto" id="contact">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+          <div class="space-y-6">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
+              Let's build something
+              <span class="text-secondary">extraordinary</span> together.
+            </h2>
+            <p class="text-lg text-on-surface-variant leading-relaxed">
+              Have a project in mind, collaboration proposal, or just want to
+              connect? Send a message or reach out directly via WhatsApp for a
+              fast response.
+            </p>
+            <div class="space-y-4 pt-2">
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary"
+                >
+                  <span class="material-symbols-outlined">chat</span>
+                </div>
+                <span class="text-base font-medium"
+                  >Direct WhatsApp Messaging Available</span
+                >
+              </div>
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary"
+                >
+                  <span class="material-symbols-outlined">location_on</span>
+                </div>
+                <span class="text-base font-medium"
+                  >Bojong Gede, West Java, Indonesia</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-white p-8 md:p-10 rounded-2xl border border-outline-variant shadow-lg space-y-6"
+          >
+            <h3 class="text-xl font-bold">Get In Touch</h3>
+            <form
+              class="space-y-4"
+              onsubmit="
+                event.preventDefault();
+                window.open(
+                  'https://wa.me/?text=' +
+                    encodeURIComponent(
+                      'Halo, nama saya ' +
+                        this.name.value +
+                        '. ' +
+                        this.message.value,
+                    ),
+                  '_blank',
+                );
+              "
+            >
+              <div>
+                <label
+                  class="block text-xs font-mono uppercase tracking-wider text-on-surface-variant mb-2"
+                  >Your Name</label
+                >
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-secondary transition-colors"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-mono uppercase tracking-wider text-on-surface-variant mb-2"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-secondary transition-colors"
+                  placeholder="john@example.com"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-mono uppercase tracking-wider text-on-surface-variant mb-2"
+                  >Message</label
+                >
+                <textarea
+                  name="message"
+                  rows="4"
+                  required
+                  class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-secondary transition-colors resize-none"
+                  placeholder="Tell me about your project..."
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-secondary hover:bg-secondary-container text-on-secondary py-4 rounded-lg font-medium transition-all shadow-md flex justify-center items-center gap-2"
+              >
+                <span>Send via WhatsApp</span>
+                <span class="material-symbols-outlined text-[20px]">send</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface border-t border-outline-variant/35 w-full">
+      <div
+        class="flex flex-col md:flex-row justify-between items-center py-10 px-6 md:px-10 max-w-[1280px] mx-auto gap-6"
+      >
+        <div class="flex flex-col items-center md:items-start gap-1">
+          <span class="font-bold text-lg text-on-surface"
+            >Razan Muhammad Ihsan Rismawandi</span
+          >
+          <p class="text-xs text-on-surface-variant">
+            © 2026 All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-8">
+          <a
+            class="text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors"
+            href="https://github.com/RazanMuhammad"
+            target="_blank"
+            >GitHub</a
+          >
+          <a
+            class="text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors"
+            href="#"
+            target="_blank"
+            >LinkedIn</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
