@@ -1,18 +1,179 @@
+<?php
+// Variabel untuk Data Diri & Informasi
+$nama           = "Razan Muhammad Ihsan Rismawandi";
+$nama_panggil   = "Razan";
+$role           = "Full-Stack Web Developer & Data Enthusiast";
+$bio            = "Currently in my fourth semester as an Informatics Engineering student, I combine rigorous academic foundations in data structures and systems analysis with hands-on full-stack development experience.";
+$bio_detail     = "Whether I'm developing multi-role workshop management systems, company profile platforms, or exploring image processing techniques and AI/ML workflows, I strive for clean, maintainable, and premium digital experiences.";
+$github         = "https://github.com/ZanIhsan2";
+$linkedin       = "#";
+$lokasi         = "Bojong Gede, West Java, Indonesia";
+$gpa            = "3.70";
+$total_projects = "15+";
+
+// Status Ketersediaan
+$open_to_work   = true;
+
+// 2. Array untuk Daftar Skill
+$skills = [
+    ["name" => "React & TypeScript", "icon" => "terminal"],
+    ["name" => "Laravel & PHP", "icon" => "dns"],
+    ["name" => "Tailwind CSS", "icon" => "palette"],
+    ["name" => "AI / Machine Learning", "icon" => "psychology"]
+];
+
+// Data Projects
+$projects = [
+    [
+        "title" => "Workshop Management Platform",
+        "description" => "Developed comprehensive multi-role dashboards for administrators and users, managing service records, structural database migrations, and optimized backend endpoints.",
+        "tech" => ["Laravel", "MySQL", "Tailwind"],
+        "image" => "assets/bengkel.png",
+        "link" => "#",
+        "category" => "Backend"
+    ],
+    [
+        "title" => "Company Profile Web App",
+        "description" => "Successfully designed, built, and deployed a modern corporate profile website featuring responsive layouts, clean technical documentation sections, and optimized frontend assets.",
+        "tech" => ["React", "Tailwind CSS"],
+        "image" => "assets/sts.png",
+        "link" => "https://www.santekniksolusi.com/",
+        "category" => "Frontend"
+    ]
+];
+
+// Nested Array untuk Skill Tree Rekursif
+$skill_tree = [
+    "Web Development" => [
+        "Frontend" => [
+            "HTML & CSS" => ["Flexbox", "Grid", "Tailwind"],
+            "JavaScript" => ["ES6+", "React", "TypeScript"]
+        ],
+        "Backend" => [
+            "PHP" => ["Laravel", "Eloquent ORM"],
+            "Database" => ["MySQL", "Database Normalization"]
+        ]
+    ],
+    "Data & AI" => [
+        "Machine Learning" => ["Python", "Scikit-Learn"],
+        "Image Processing" => ["Fourier Transforms", "OCR Optimization"]
+    ]
+];
+
+// Fungsi renderProjectCard() dengan SWITCH untuk Kategori Project
+function renderProjectCard($title, $description, $tech, $image, $link, $category) {
+    // SWITCH untuk Kategori Project
+    $category_badge_color = "bg-primary-fixed text-on-primary-fixed";
+    switch ($category) {
+        case 'Frontend':
+            $category_badge_color = "bg-blue-100 text-blue-800";
+            break;
+        case 'Backend':
+            $category_badge_color = "bg-purple-100 text-purple-800";
+            break;
+        case 'Fullstack':
+            $category_badge_color = "bg-green-100 text-green-800";
+            break;
+        default:
+            $category_badge_color = "bg-gray-100 text-gray-800";
+            break;
+    }
+
+    $tech_html = "";
+    foreach ($tech as $t) {
+        $tech_html .= "<span class='bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium'>{$t}</span>";
+    }
+
+    return '
+    <div class="project-card group cursor-pointer flex flex-col justify-between bg-white p-6 rounded-2xl border border-outline-variant shadow-sm">
+        <div>
+            <div class="relative overflow-hidden rounded-xl border border-outline-variant bg-surface aspect-video mb-6">
+                <img src="' . $image . '" alt="' . $title . ' Preview" class="w-full h-full object-cover project-image transition-transform duration-500" />
+            </div>
+            <div class="space-y-3">
+                <div class="flex flex-wrap gap-2 items-center">
+                    <span class="px-2.5 py-1 rounded text-xs font-bold ' . $category_badge_color . '">' . $category . '</span>
+                    ' . $tech_html . '
+                </div>
+                <h3 class="text-xl font-bold">' . $title . '</h3>
+                <p class="text-on-surface-variant text-sm leading-relaxed">' . $description . '</p>
+            </div>
+        </div>
+        <div class="pt-6">
+            <a href="' . $link . '" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-secondary-container transition-colors">
+                <span>Live Preview</span>
+                <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+            </a>
+        </div>
+    </div>';
+}
+
+// Fungsi yang memanggil fungsi lain
+function renderPortfolioSection($section_title, $projects_array) {
+    $html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-10">';
+    foreach ($projects_array as $p) {
+        // Memanggil fungsi renderProjectCard di dalam foreach
+        $html .= renderProjectCard(
+            $p['title'], 
+            $p['description'], 
+            $p['tech'], 
+            $p['image'], 
+            $p['link'], 
+            $p['category']
+        );
+    }
+    $html .= '</div>';
+    return $html;
+}
+
+// Fungsi Rekursif untuk Skill Tree
+function renderSkillTree($array) {
+    $html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-8">';
+    foreach ($array as $category_name => $subcategories) {
+        $html .= '<div class="bg-surface p-6 rounded-2xl border border-outline-variant/40 space-y-4">';
+        // Header Kategori Utama
+        $html .= '<div class="font-bold text-base text-secondary flex items-center gap-2 border-b border-outline-variant/30 pb-3">';
+        $html .= '<span class="material-symbols-outlined text-[20px]">folder_open</span> ' . $category_name;
+        $html .= '</div>';
+        
+        $html .= '<div class="space-y-4 pl-2">';
+        foreach ($subcategories as $sub_name => $items) {
+            $html .= '<div class="space-y-2">';
+            $html .= '<div class="font-semibold text-xs text-on-surface uppercase tracking-wider flex items-center gap-1.5 text-on-surface-variant">';
+            $html .= '<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> ' . $sub_name;
+            $html .= '</div>';
+            
+            // Skill Chips Container
+            $html .= '<div class="flex flex-wrap gap-1.5 pl-3 border-l-2 border-outline-variant/30 ml-1 py-1">';
+            foreach ($items as $label => $sub_items) {
+                // Handle jika sub-item berupa array atau string akhir
+                if (is_array($sub_items)) {
+                    $html .= '<div class="w-full text-xs font-medium text-on-surface mt-1 mb-1">' . $label . ':</div>';
+                    foreach ($sub_items as $skill) {
+                        $html .= '<span class="text-xs font-medium text-on-surface bg-white px-3 py-1 rounded-md border border-outline-variant/40 shadow-sm hover:border-secondary transition-colors">✨ ' . $skill . '</span>';
+                    }
+                } else {
+                    $html .= '<span class="text-xs font-medium text-on-surface bg-white px-3 py-1 rounded-md border border-outline-variant/40 shadow-sm hover:border-secondary transition-colors">✨ ' . $sub_items . '</span>';
+                }
+            }
+            $html .= '</div>'; // End chips
+            $html .= '</div>'; // End sub_name block
+        }
+        $html .= '</div>'; // End subcategories
+        $html .= '</div>'; // End card kategori
+    }
+    $html .= '</div>'; // End grid
+    return $html;
+}
+?>
 <!doctype html>
 <html class="scroll-smooth" lang="en">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Razan Muhammad Ihsan Rismawandi | Portfolio</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <!-- Chart.js CDN -->
+    <title><?php echo $nama; ?> | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
@@ -45,33 +206,11 @@
       };
     </script>
     <style>
-      .material-symbols-outlined {
-        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-      }
-      .glass-header {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-      }
-      .fade-in-up {
-        animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      }
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .project-card:hover .project-image {
-        transform: scale(1.05);
-      }
-      .btn-press:active {
-        transform: scale(0.98);
-      }
+      .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; }
+      .glass-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+      .fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      .project-card:hover .project-image { transform: scale(1.05); }
     </style>
   </head>
   <body class="bg-surface text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed">
@@ -79,7 +218,7 @@
     <!-- TopNavBar -->
     <header class="glass-header border-b border-outline-variant/35 sticky top-0 z-50 shadow-sm w-full">
       <nav class="flex justify-between items-center h-[72px] w-full px-6 md:px-10 max-w-[1280px] mx-auto">
-        <a class="font-bold text-xl text-on-surface tracking-tight" href="#">Razan</a>
+        <a class="font-bold text-xl text-on-surface tracking-tight" href="#"><?php echo $nama_panggil; ?></a>
 
         <!-- Desktop Nav -->
         <div class="hidden md:flex items-center gap-8">
@@ -88,12 +227,11 @@
           <a class="text-sm font-medium text-on-surface hover:text-secondary transition-colors" href="#projects">Projects</a>
           <a class="text-sm font-medium text-on-surface hover:text-secondary transition-colors" href="#dashboard">Dashboard</a>
           <a class="text-sm font-medium text-on-surface hover:text-secondary transition-colors" href="#contact">Contact</a>
-          <a href="https://github.com/ZanIhsan2" target="_blank" class="bg-secondary text-on-secondary px-5 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-secondary-container shadow-sm">
+          <a href="<?php echo $github; ?>" target="_blank" class="bg-secondary text-on-secondary px-5 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-secondary-container shadow-sm">
             GitHub
           </a>
         </div>
 
-        <!-- Mobile Toggle Button (Event Listener Target) -->
         <button id="mobile-menu-btn" class="md:hidden p-2 text-on-surface focus:outline-none">
           <span class="material-symbols-outlined">menu</span>
         </button>
@@ -105,21 +243,34 @@
       <section class="relative overflow-hidden py-20 md:py-32 px-6 md:px-10 max-w-[1280px] mx-auto">
         <div class="fade-in-up flex flex-col md:flex-row items-center gap-12">
           <div class="flex-1 space-y-6">
-            <!-- Dynamic Greeting Banner via JS -->
-            <div id="dynamic-greeting" class="inline-flex items-center gap-2 bg-secondary-fixed text-on-secondary-fixed px-4 py-1.5 rounded-full text-xs font-medium">
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-              </span>
-              <span id="greeting-text">Welcome to my portfolio!</span>
+            
+            <!-- 3. Status Ketersediaan dengan Kondisi IF/ELSE -->
+            <div class="flex items-center gap-3">
+              <div id="dynamic-greeting" class="inline-flex items-center gap-2 bg-secondary-fixed text-on-secondary-fixed px-4 py-1.5 rounded-full text-xs font-medium">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                </span>
+                <span id="greeting-text">Welcome to my portfolio!</span>
+              </div>
+
+              <?php if ($open_to_work): ?>
+                <span class="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                  Open to Work 🟢
+                </span>
+              <?php else: ?>
+                <span class="inline-flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
+                  Not Available 🔴
+                </span>
+              <?php endif; ?>
             </div>
 
             <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
-              Hi, I'm <span class="text-secondary">Razan Muhammad</span> Ihsan Rismawandi
+              Hi, I'm <span class="text-secondary"><?php echo $nama; ?></span>
             </h1>
 
             <p class="text-lg text-on-surface-variant max-w-xl leading-relaxed">
-              A full-stack web developer and data enthusiast focused on building clean, high-performance applications using React, TypeScript, and Laravel. Passionate about AI, Machine Learning, and modern web architectures.
+              <?php echo $bio; ?>
             </p>
 
             <div class="flex flex-wrap gap-4 pt-2">
@@ -138,7 +289,7 @@
               <div class="w-full h-full bg-surface-container rounded-xl flex flex-col items-center justify-center p-6 text-center border border-outline-variant/40">
                 <span class="material-symbols-outlined text-[64px] text-secondary mb-4">code</span>
                 <p class="font-mono text-xs text-on-surface-variant mb-1">// Full-Stack Developer</p>
-                <h3 class="font-bold text-lg text-on-surface">React • Laravel • TypeScript</h3>
+                <h3 class="font-bold text-lg text-on-surface"><?php echo $role; ?></h3>
                 <p class="text-xs text-on-surface-variant mt-4">"Late-night coding with lo-fi beats."</p>
               </div>
             </div>
@@ -159,19 +310,19 @@
             </div>
             <div class="md:col-span-7 space-y-4">
               <p class="text-lg text-on-surface-variant leading-relaxed">
-                Currently in my fourth semester as an Informatics Engineering student, I combine rigorous academic foundations in data structures and systems analysis with hands-on full-stack development experience.
+                <?php echo $bio; ?>
               </p>
               <p class="text-lg text-on-surface-variant leading-relaxed">
-                Whether I'm developing multi-role workshop management systems, company profile platforms, or exploring image processing techniques and AI/ML workflows, I strive for clean, maintainable, and premium digital experiences.
+                <?php echo $bio_detail; ?>
               </p>
 
               <div class="grid grid-cols-2 gap-4 pt-6">
                 <div class="p-6 bg-surface rounded-xl border border-outline-variant/30">
-                  <h4 class="text-2xl font-bold text-secondary mb-1">3.70</h4>
+                  <h4 class="text-2xl font-bold text-secondary mb-1"><?php echo $gpa; ?></h4>
                   <p class="text-sm text-on-surface-variant font-medium">Semester GPA (IPS)</p>
                 </div>
                 <div class="p-6 bg-surface rounded-xl border border-outline-variant/30">
-                  <h4 class="text-2xl font-bold text-secondary mb-1">15+</h4>
+                  <h4 class="text-2xl font-bold text-secondary mb-1"><?php echo $total_projects; ?></h4>
                   <p class="text-sm text-on-surface-variant font-medium">Projects & Modules Built</p>
                 </div>
               </div>
@@ -180,41 +331,33 @@
         </div>
       </section>
 
-      <!-- Skills Section -->
+      <!-- Skills Section (Rendered with Foreach Loop & Bonus Skill Tree) -->
       <section class="py-24 px-6 md:px-10 max-w-[1280px] mx-auto" id="skills">
         <div class="text-center mb-16">
           <p class="text-xs font-mono uppercase tracking-widest text-secondary mb-2">Capabilities</p>
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Technical Arsenal</h2>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        
+        <!-- 4. Foreach Loop untuk Skills -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <?php foreach ($skills as $skill): ?>
           <div class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4">
             <div class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors">
-              <span class="material-symbols-outlined">terminal</span>
+              <span class="material-symbols-outlined"><?php echo $skill['icon']; ?></span>
             </div>
-            <span class="font-medium text-sm">React & TypeScript</span>
+            <span class="font-medium text-sm text-center"><?php echo $skill['name']; ?></span>
           </div>
-          <div class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4">
-            <div class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors">
-              <span class="material-symbols-outlined">dns</span>
-            </div>
-            <span class="font-medium text-sm">Laravel & PHP</span>
-          </div>
-          <div class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4">
-            <div class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors">
-              <span class="material-symbols-outlined">palette</span>
-            </div>
-            <span class="font-medium text-sm">Tailwind CSS</span>
-          </div>
-          <div class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4">
-            <div class="w-12 h-12 flex items-center justify-center bg-secondary-fixed rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors">
-              <span class="material-symbols-outlined">psychology</span>
-            </div>
-            <span class="font-medium text-sm">AI / Machine Learning</span>
-          </div>
+          <?php endforeach; ?>
+        </div>
+
+        <!-- Skill Tree Rekursif Section -->
+        <div class="bg-white p-8 rounded-2xl border border-outline-variant shadow-sm w-full">
+          <h3 class="font-bold text-base mb-4 text-center">Interactive Skill Tree</h3>
+          <?php echo renderSkillTree($skill_tree); ?>
         </div>
       </section>
 
-      <!-- Projects Section -->
+      <!-- Projects Section (Rendered via Nested Functions 5 & 6) -->
       <section class="bg-white py-24 px-6 md:px-10" id="projects">
         <div class="max-w-[1280px] mx-auto">
           <div class="flex justify-between items-end mb-16">
@@ -222,68 +365,18 @@
               <p class="text-xs font-mono uppercase tracking-widest text-secondary mb-2">Selected Work</p>
               <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Featured Projects</h2>
             </div>
-            <a class="hidden md:flex items-center gap-2 text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="https://github.com/ZanIhsan2" target="_blank">
+            <a class="hidden md:flex items-center gap-2 text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="<?php echo $github; ?>" target="_blank">
               View GitHub Profile
               <span class="material-symbols-outlined">open_in_new</span>
             </a>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <!-- Card1 -->
-            <div class="project-card group cursor-pointer flex flex-col justify-between">
-              <div>
-                <div class="relative overflow-hidden rounded-xl border border-outline-variant bg-surface aspect-video mb-6">
-                  <img src="assets/bengkel.png" alt="Motorcycle Workshop System Preview" class="w-full h-full object-cover project-image transition-transform duration-500" />
-                </div>
-                <div class="space-y-3">
-                  <div class="flex gap-2">
-                    <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium">Laravel</span>
-                    <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium">MySQL</span>
-                    <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium">Tailwind</span>
-                  </div>
-                  <h3 class="text-xl font-bold">Workshop Management Platform</h3>
-                  <p class="text-on-surface-variant text-sm leading-relaxed">
-                    Developed comprehensive multi-role dashboards for administrators and users, managing service records, structural database migrations, and optimized backend endpoints.
-                  </p>
-                </div>
-              </div>
-              <div class="pt-6">
-                <a href="#" class="inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-secondary-container transition-colors">
-                  <span>Live Preview</span>
-                  <span class="material-symbols-outlined text-[18px]">open_in_new</span>
-                </a>
-              </div>
-            </div>
-
-            <!-- Card2 -->
-            <div class="project-card group cursor-pointer flex flex-col justify-between">
-              <div>
-                <div class="relative overflow-hidden rounded-xl border border-outline-variant bg-surface aspect-video mb-6">
-                  <img src="assets/sts.png" alt="PT. San Teknik Solusi Preview" class="w-full h-full object-cover project-image transition-transform duration-500" />
-                </div>
-                <div class="space-y-3">
-                  <div class="flex gap-2">
-                    <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium">React</span>
-                    <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium">Tailwind CSS</span>
-                  </div>
-                  <h3 class="text-xl font-bold">Company Profile Web App</h3>
-                  <p class="text-on-surface-variant text-sm leading-relaxed">
-                    Successfully designed, built, and deployed a modern corporate profile website featuring responsive layouts, clean technical documentation sections, and optimized frontend assets.
-                  </p>
-                </div>
-              </div>
-              <div class="pt-6">
-                <a href="https://www.santekniksolusi.com/" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-secondary-container transition-colors">
-                  <span>Live Preview</span>
-                  <span class="material-symbols-outlined text-[18px]">open_in_new</span>
-                </a>
-              </div>
-            </div>
-          </div>
+          <!-- Memanggil Fungsi renderPortfolioSection yang di dalamnya memanggil renderProjectCard -->
+          <?php echo renderPortfolioSection("Featured Projects", $projects); ?>
         </div>
       </section>
 
-      <!-- BAGIAN 3 & 4: Dashboard & Advanced Chart Reporting Section -->
+      <!-- BAGIAN Dashboard & Advanced Chart Reporting Section -->
       <section class="py-24 px-6 md:px-10 max-w-[1280px] mx-auto" id="dashboard">
         <div class="text-center mb-16">
           <p class="text-xs font-mono uppercase tracking-widest text-secondary mb-2">Analytics & Reporting</p>
@@ -291,7 +384,6 @@
           <p class="text-sm text-on-surface-variant mt-2">Visualized datasets covering skill levels, learning metrics, and advanced configurations.</p>
         </div>
 
-        <!-- Programmatic Trigger Control Button -->
         <div class="flex justify-center mb-10">
           <button id="update-charts-btn" class="bg-secondary hover:bg-secondary-container text-on-secondary px-6 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm flex items-center gap-2">
             <span class="material-symbols-outlined text-[18px]">refresh</span>
@@ -299,25 +391,19 @@
           </button>
         </div>
 
-        <!-- Grid Chart: Bar, Line, Pie -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <!-- 1. Bar Chart -->
           <div class="bg-white p-6 rounded-2xl border border-outline-variant shadow-sm flex flex-col justify-between">
             <h3 class="font-bold text-base mb-4">Skill Proficiency (Bar Chart)</h3>
             <div class="relative w-full aspect-square flex items-center justify-center">
               <canvas id="skillBarChart"></canvas>
             </div>
           </div>
-
-          <!-- 2. Line Chart -->
           <div class="bg-white p-6 rounded-2xl border border-outline-variant shadow-sm flex flex-col justify-between">
             <h3 class="font-bold text-base mb-4">Learning Progress (Line Chart)</h3>
             <div class="relative w-full aspect-square flex items-center justify-center">
               <canvas id="learningLineChart"></canvas>
             </div>
           </div>
-
-          <!-- 3. Pie Chart -->
           <div class="bg-white p-6 rounded-2xl border border-outline-variant shadow-sm flex flex-col justify-between">
             <h3 class="font-bold text-base mb-4">Project Categories (Pie Chart)</h3>
             <div class="relative w-full aspect-square flex items-center justify-center">
@@ -326,17 +412,13 @@
           </div>
         </div>
 
-        <!-- Advanced Dashboard Section: Stacked Bar & Scatter Chart -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- 4. Stacked Bar Chart (Advanced Feature) -->
           <div class="bg-white p-6 rounded-2xl border border-outline-variant shadow-sm">
             <h3 class="font-bold text-base mb-4">Quarterly Tech Stack Allocation (Stacked Bar)</h3>
             <div class="relative w-full aspect-video flex items-center justify-center">
               <canvas id="stackedBarChart"></canvas>
             </div>
           </div>
-
-          <!-- 5. Scatter Chart with Scriptable Options -->
           <div class="bg-white p-6 rounded-2xl border border-outline-variant shadow-sm">
             <h3 class="font-bold text-base mb-4">Complexity vs. Hours Spent (Scatter Chart)</h3>
             <div class="relative w-full aspect-video flex items-center justify-center">
@@ -367,14 +449,13 @@
                 <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary">
                   <span class="material-symbols-outlined">location_on</span>
                 </div>
-                <span class="text-base font-medium">Bojong Gede, West Java, Indonesia</span>
+                <span class="text-base font-medium"><?php echo $lokasi; ?></span>
               </div>
             </div>
           </div>
 
           <div class="bg-white p-8 md:p-10 rounded-2xl border border-outline-variant shadow-lg space-y-6">
             <h3 class="text-xl font-bold">Get In Touch</h3>
-            <!-- Form dengan validasi sederhana dan Event Handling submit -->
             <form id="contact-form" class="space-y-4">
               <div>
                 <label class="block text-xs font-mono uppercase tracking-wider text-on-surface-variant mb-2">Your Name</label>
@@ -388,7 +469,6 @@
                 <label class="block text-xs font-mono uppercase tracking-wider text-on-surface-variant mb-2">Message</label>
                 <textarea name="message" rows="4" required class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-secondary transition-colors resize-none" placeholder="Tell me about your project..."></textarea>
               </div>
-              <!-- Feedback pesan error/sukses form -->
               <p id="form-feedback" class="text-xs font-medium text-red-500 hidden"></p>
               <button type="submit" class="w-full bg-secondary hover:bg-secondary-container text-on-secondary py-4 rounded-lg font-medium transition-all shadow-md flex justify-center items-center gap-2">
                 <span>Send via WhatsApp</span>
@@ -404,12 +484,12 @@
     <footer class="bg-surface border-t border-outline-variant/35 w-full">
       <div class="flex flex-col md:flex-row justify-between items-center py-10 px-6 md:px-10 max-w-[1280px] mx-auto gap-6">
         <div class="flex flex-col items-center md:items-start gap-1">
-          <span class="font-bold text-lg text-on-surface">Razan Muhammad Ihsan Rismawandi</span>
-          <p class="text-xs text-on-surface-variant">© 2026 All rights reserved.</p>
+          <span class="font-bold text-lg text-on-surface"><?php echo $nama; ?></span>
+          <p class="text-xs text-on-surface-variant">© <?php echo date('Y'); ?> All rights reserved.</p>
         </div>
         <div class="flex gap-8">
-          <a class="text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="https://github.com/ZanIhsan2" target="_blank">GitHub</a>
-          <a class="text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="#" target="_blank">LinkedIn</a>
+          <a class="text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="<?php echo $github; ?>" target="_blank">GitHub</a>
+          <a class="text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="<?php echo $linkedin; ?>" target="_blank">LinkedIn</a>
         </div>
       </div>
     </footer>
