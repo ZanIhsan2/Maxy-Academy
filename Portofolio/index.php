@@ -1,14 +1,16 @@
 <?php
+include __DIR__ . '/koneksi.php';
+
 // Variabel untuk Data Diri & Informasi
-$nama           = "Razan Muhammad Ihsan Rismawandi";
+$nama         = "Razan Muhammad Ihsan Rismawandi";
 $nama_panggil   = "Razan";
-$role           = "Full-Stack Web Developer & Data Enthusiast";
-$bio            = "Currently in my fourth semester as an Informatics Engineering student, I combine rigorous academic foundations in data structures and systems analysis with hands-on full-stack development experience.";
+$role         = "Full-Stack Web Developer & Data Enthusiast";
+$bio          = "Currently in my fourth semester as an Informatics Engineering student, I combine rigorous academic foundations in data structures and systems analysis with hands-on full-stack development experience.";
 $bio_detail     = "Whether I'm developing multi-role workshop management systems, company profile platforms, or exploring image processing techniques and AI/ML workflows, I strive for clean, maintainable, and premium digital experiences.";
-$github         = "https://github.com/ZanIhsan2";
-$linkedin       = "#";
-$lokasi         = "Bojong Gede, West Java, Indonesia";
-$gpa            = "3.70";
+$github       = "https://github.com/ZanIhsan2";
+$linkedin     = "#";
+$lokasi       = "Bojong Gede, West Java, Indonesia";
+$gpa          = "3.70";
 $total_projects = "15+";
 
 // Status Ketersediaan
@@ -22,25 +24,26 @@ $skills = [
     ["name" => "AI / Machine Learning", "icon" => "psychology"]
 ];
 
-// Data Projects
-$projects = [
-    [
-        "title" => "Workshop Management Platform",
-        "description" => "Developed comprehensive multi-role dashboards for administrators and users, managing service records, structural database migrations, and optimized backend endpoints.",
-        "tech" => ["Laravel", "MySQL", "Tailwind"],
-        "image" => "assets/bengkel.png",
-        "link" => "#",
-        "category" => "Backend"
-    ],
-    [
-        "title" => "Company Profile Web App",
-        "description" => "Successfully designed, built, and deployed a modern corporate profile website featuring responsive layouts, clean technical documentation sections, and optimized frontend assets.",
-        "tech" => ["React", "Tailwind CSS"],
-        "image" => "assets/sts.png",
-        "link" => "https://www.santekniksolusi.com/",
-        "category" => "Frontend"
-    ]
-];
+// Ambil Data Projects secara dinamis dari Database MySQL
+$projects = [];
+$result = mysqli_query($conn, "SELECT * FROM projects ORDER BY id DESC");
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        // Ubah string tech yang dipisah koma menjadi array
+        $row['tech'] = explode(',', $row['tech']);
+        
+        // Prioritaskan file_path (hasil upload), lalu kolom image, jika tidak ada baru gunakan default
+        if (!empty($row['file_path']) && file_exists($row['file_path'])) {
+            $row['image'] = $row['file_path'];
+        } elseif (!empty($row['image']) && file_exists($row['image'])) {
+            $row['image'] = $row['image'];
+        } else {
+            $row['image'] = "assets/sts.png"; 
+        }
+
+        $projects[] = $row;
+    }
+}
 
 // Nested Array untuk Skill Tree Rekursif
 $skill_tree = [
@@ -60,9 +63,8 @@ $skill_tree = [
     ]
 ];
 
-// Fungsi renderProjectCard() dengan SWITCH untuk Kategori Project
-function renderProjectCard($title, $description, $tech, $image, $link, $category) {
-    // SWITCH untuk Kategori Project
+// Fungsi renderProjectCard() dengan Database, Delete, & Download
+function renderProjectCard($id, $title, $description, $tech, $image, $file_path, $category) {
     $category_badge_color = "bg-primary-fixed text-on-primary-fixed";
     switch ($category) {
         case 'Frontend':
@@ -72,6 +74,7 @@ function renderProjectCard($title, $description, $tech, $image, $link, $category
             $category_badge_color = "bg-purple-100 text-purple-800";
             break;
         case 'Fullstack':
+        case 'Full-Stack':
             $category_badge_color = "bg-green-100 text-green-800";
             break;
         default:
@@ -81,44 +84,54 @@ function renderProjectCard($title, $description, $tech, $image, $link, $category
 
     $tech_html = "";
     foreach ($tech as $t) {
-        $tech_html .= "<span class='bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium'>{$t}</span>";
+        $tech_html .= "<span class='bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded text-xs font-medium'>" . trim($t) . "</span>";
+    }
+
+    $download_btn = "";
+    if (!empty($file_path) && file_exists($file_path)) {
+        $download_btn = '<a href="' . $file_path . '" download class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"><span>Download File</span><span class="material-symbols-outlined text-[18px]">download</span></a>';
     }
 
     return '
-    <div class="project-card group cursor-pointer flex flex-col justify-between bg-white p-6 rounded-2xl border border-outline-variant shadow-sm">
+    <div class="project-card group cursor-pointer flex flex-col justify-between bg-white p-6 rounded-2xl border border-outline-variant shadow-sm relative">
         <div>
             <div class="relative overflow-hidden rounded-xl border border-outline-variant bg-surface aspect-video mb-6">
                 <img src="' . $image . '" alt="' . $title . ' Preview" class="w-full h-full object-cover project-image transition-transform duration-500" />
             </div>
             <div class="space-y-3">
-                <div class="flex flex-wrap gap-2 items-center">
-                    <span class="px-2.5 py-1 rounded text-xs font-bold ' . $category_badge_color . '">' . $category . '</span>
-                    ' . $tech_html . '
+                <div class="flex flex-wrap gap-2 items-center justify-between">
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <span class="px-2.5 py-1 rounded text-xs font-bold ' . $category_badge_color . '">' . $category . '</span>
+                        ' . $tech_html . '
+                    </div>
+                    <a href="./components/delete.php?id=' . $id . '" onclick="return confirm(\'Yakin ingin menghapus project ini?\')" class="text-red-500 hover:text-red-700 text-xs font-semibold flex items-center gap-1 bg-red-50 px-2.5 py-1 rounded-lg border border-red-100">
+                        <span class="material-symbols-outlined text-[16px]">delete</span> Delete
+                    </a>
                 </div>
                 <h3 class="text-xl font-bold">' . $title . '</h3>
                 <p class="text-on-surface-variant text-sm leading-relaxed">' . $description . '</p>
             </div>
         </div>
-        <div class="pt-6">
-            <a href="' . $link . '" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-secondary-container transition-colors">
-                <span>Live Preview</span>
-                <span class="material-symbols-outlined text-[18px]">open_in_new</span>
-            </a>
+        <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+            ' . $download_btn . '
         </div>
     </div>';
 }
 
 // Fungsi yang memanggil fungsi lain
-function renderPortfolioSection($section_title, $projects_array) {
+function renderPortfolioSection($projects_array) {
+    if (empty($projects_array)) {
+        return '<p class="text-center text-on-surface-variant py-8">Belum ada project yang ditambahkan ke database.</p>';
+    }
     $html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-10">';
     foreach ($projects_array as $p) {
-        // Memanggil fungsi renderProjectCard di dalam foreach
         $html .= renderProjectCard(
+            $p['id'],
             $p['title'], 
             $p['description'], 
             $p['tech'], 
             $p['image'], 
-            $p['link'], 
+            $p['file_path'],
             $p['category']
         );
     }
@@ -131,7 +144,6 @@ function renderSkillTree($array) {
     $html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-8">';
     foreach ($array as $category_name => $subcategories) {
         $html .= '<div class="bg-surface p-6 rounded-2xl border border-outline-variant/40 space-y-4">';
-        // Header Kategori Utama
         $html .= '<div class="font-bold text-base text-secondary flex items-center gap-2 border-b border-outline-variant/30 pb-3">';
         $html .= '<span class="material-symbols-outlined text-[20px]">folder_open</span> ' . $category_name;
         $html .= '</div>';
@@ -143,10 +155,8 @@ function renderSkillTree($array) {
             $html .= '<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> ' . $sub_name;
             $html .= '</div>';
             
-            // Skill Chips Container
             $html .= '<div class="flex flex-wrap gap-1.5 pl-3 border-l-2 border-outline-variant/30 ml-1 py-1">';
             foreach ($items as $label => $sub_items) {
-                // Handle jika sub-item berupa array atau string akhir
                 if (is_array($sub_items)) {
                     $html .= '<div class="w-full text-xs font-medium text-on-surface mt-1 mb-1">' . $label . ':</div>';
                     foreach ($sub_items as $skill) {
@@ -156,13 +166,13 @@ function renderSkillTree($array) {
                     $html .= '<span class="text-xs font-medium text-on-surface bg-white px-3 py-1 rounded-md border border-outline-variant/40 shadow-sm hover:border-secondary transition-colors">✨ ' . $sub_items . '</span>';
                 }
             }
-            $html .= '</div>'; // End chips
-            $html .= '</div>'; // End sub_name block
+            $html .= '</div>';
+            $html .= '</div>';
         }
-        $html .= '</div>'; // End subcategories
-        $html .= '</div>'; // End card kategori
+        $html .= '</div>';
+        $html .= '</div>';
     }
-    $html .= '</div>'; // End grid
+    $html .= '</div>';
     return $html;
 }
 ?>
@@ -243,8 +253,6 @@ function renderSkillTree($array) {
       <section class="relative overflow-hidden py-20 md:py-32 px-6 md:px-10 max-w-[1280px] mx-auto">
         <div class="fade-in-up flex flex-col md:flex-row items-center gap-12">
           <div class="flex-1 space-y-6">
-            
-            <!-- 3. Status Ketersediaan dengan Kondisi IF/ELSE -->
             <div class="flex items-center gap-3">
               <div id="dynamic-greeting" class="inline-flex items-center gap-2 bg-secondary-fixed text-on-secondary-fixed px-4 py-1.5 rounded-full text-xs font-medium">
                 <span class="relative flex h-2 w-2">
@@ -331,14 +339,13 @@ function renderSkillTree($array) {
         </div>
       </section>
 
-      <!-- Skills Section (Rendered with Foreach Loop & Bonus Skill Tree) -->
+      <!-- Skills Section -->
       <section class="py-24 px-6 md:px-10 max-w-[1280px] mx-auto" id="skills">
         <div class="text-center mb-16">
           <p class="text-xs font-mono uppercase tracking-widest text-secondary mb-2">Capabilities</p>
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Technical Arsenal</h2>
         </div>
         
-        <!-- 4. Foreach Loop untuk Skills -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           <?php foreach ($skills as $skill): ?>
           <div class="group p-8 bg-white border border-outline-variant rounded-xl transition-all hover:shadow-lg hover:border-secondary flex flex-col items-center gap-4">
@@ -357,22 +364,27 @@ function renderSkillTree($array) {
         </div>
       </section>
 
-      <!-- Projects Section (Rendered via Nested Functions 5 & 6) -->
+      <!-- Projects Section (Connected to Database) -->
       <section class="bg-white py-24 px-6 md:px-10" id="projects">
         <div class="max-w-[1280px] mx-auto">
-          <div class="flex justify-between items-end mb-16">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
             <div>
               <p class="text-xs font-mono uppercase tracking-widest text-secondary mb-2">Selected Work</p>
               <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Featured Projects</h2>
             </div>
-            <a class="hidden md:flex items-center gap-2 text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="<?php echo $github; ?>" target="_blank">
-              View GitHub Profile
-              <span class="material-symbols-outlined">open_in_new</span>
-            </a>
+            <div class="flex items-center gap-4">
+              <a href="./components/create.php" class="bg-secondary hover:bg-secondary-container text-on-secondary px-4 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">add</span> Add Project
+              </a>
+              <a class="hidden md:flex items-center gap-2 text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors" href="<?php echo $github; ?>" target="_blank">
+                View GitHub Profile
+                <span class="material-symbols-outlined">open_in_new</span>
+              </a>
+            </div>
           </div>
 
-          <!-- Memanggil Fungsi renderPortfolioSection yang di dalamnya memanggil renderProjectCard -->
-          <?php echo renderPortfolioSection("Featured Projects", $projects); ?>
+          <!-- Memanggil daftar project dari database MySQL -->
+          <?php echo renderPortfolioSection($projects); ?>
         </div>
       </section>
 
