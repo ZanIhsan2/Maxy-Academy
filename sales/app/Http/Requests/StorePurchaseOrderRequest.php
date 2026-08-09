@@ -23,11 +23,11 @@ class StorePurchaseOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'no_order'           => 'required|string|max:45|unique:purchase_order,no_order',
+            'no_order'           => 'required',
             'tanggal_dibutuhkan' => 'required|date',
             'm_vendor_id1'       => 'required|exists:m_vendor,id',
             'items'              => 'required|array|min:1',
-            'items.*.m_barang_sku' => 'required|exists:m_barang,sku',
+            'items.*.m_barang_sku' => 'required',
             'items.*.kuantitas'  => 'required|integer|min:1',
             'items.*.harga_unit' => 'required|numeric|min:0',
         ];

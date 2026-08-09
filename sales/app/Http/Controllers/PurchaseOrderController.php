@@ -6,11 +6,35 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePurchaseOrderRequest;
 use App\Models\PurchaseOrder;
 use App\Models\DetailPurchaseOrder;
+use App\Models\MVendor;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
 class PurchaseOrderController extends Controller
 {
+    /**
+     * Tampilkan daftar Purchase Order.
+     */
+    public function index()
+    {
+        $purchaseOrders = PurchaseOrder::with('vendor')->latest()->get();
+
+        return view('purchasing.index', compact('purchaseOrders'));
+    }
+
+    /**
+     * Tampilkan form create Purchase Order.
+     */
+    public function create()
+    {
+        $vendors = MVendor::all();
+
+        return view('purchasing.create', compact('vendors'));
+    }
+
+    /**
+     * Simpan data Purchase Order baru ke database.
+     */
     public function store(StorePurchaseOrderRequest $request)
     {
         DB::beginTransaction();
@@ -37,11 +61,11 @@ class PurchaseOrderController extends Controller
             // Jika sukses, commit database
             DB::commit();
             return redirect()->route('purchase-order.index')->with('success', 'Transaksi Purchase Order berhasil disimpan.');
-
         } catch (Exception $e) {
             // Jika gagal, batalkan semua perubahan
             DB::rollBack();
-            return redirect()->back()->withInput()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage());
+            dd($e->getMessage());
+            // return redirect()->back()->withInput()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage());
         }
     }
 
