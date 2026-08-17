@@ -13,6 +13,7 @@
 |
 */
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -60,5 +61,14 @@ $router->group(['prefix' => 'penjualan'], function () use ($router) {
     });
     $router->delete('/{id}', function($id) {
         return response()->json(['data' => "data berhasil dihapus"]);
+    });
+    $router->get('/{id}/confirm', function (Request $request, $id) {
+        $user = $request->user();
+        Log::debug("<<<<<<<<"); 
+        Log::debug($user); 
+        if ($user == null){
+            return response()->json(['error' => 'Unauthorized'], 401, ['X-Header-One' => 'Header Value']);
+        }
+        return response()->json(['msg' => 'berhasil confirm']);
     });
 });
