@@ -16,3 +16,12 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'penjualan'], function () use ($router) {
+    $router->get('/', function () {
+        return response()->json(['msg' => 'Berhasil get penjualan']);
+    });
+    $router->get('/{id}', function ($id) {
+        return response()->json(['msg' => 'Berhasil get penjualan dengan id ' . $id]);
+    });
+});
