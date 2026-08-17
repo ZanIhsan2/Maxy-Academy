@@ -14,6 +14,7 @@
 */
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -70,5 +71,14 @@ $router->group(['prefix' => 'penjualan'], function () use ($router) {
             return response()->json(['error' => 'Unauthorized'], 401, ['X-Header-One' => 'Header Value']);
         }
         return response()->json(['msg' => 'berhasil confirm']);
+    });
+    $router->get('/{id}/send-email', function (Request $request, $id) {
+        $user = $request->user();
+        Mail::raw('This is the email body.', function ($message) {
+        $message->to('izan50488n@gmail.com')
+            ->subject('Lumen email test');
+        });
+        return 'Great! eMail successfully sent ;)';
+        return response()->json(['msg' => 'berhasil kirim email']);
     });
 });
