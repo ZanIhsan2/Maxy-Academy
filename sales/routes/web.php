@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,11 @@ Route::middleware(['auth', 'permission:manage-purchase'])->group(function () {
     Route::get('/purchase-order/{id}', [PurchaseOrderController::class, 'show'])->name('purchase-order.show');
 });
 
-require __DIR__.'/auth.php';
+Route::middleware('auth')->group(function () {
+    Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+    Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+    Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+});
+
+require __DIR__ . '/auth.php';

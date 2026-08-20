@@ -1,3 +1,229 @@
+# Sales Management System
+
+Aplikasi web untuk membantu pengelolaan data master dan proses purchasing. Proyek ini dibuat menggunakan Laravel 12, Blade, Tailwind CSS, Vite, dan MySQL.
+
+## Fitur Utama
+
+### Autentikasi dan Profil
+
+- Registrasi akun dan login.
+- Logout dan pengelolaan profil pengguna.
+- Dashboard yang hanya dapat diakses pengguna terautentikasi.
+- Verifikasi email menggunakan fitur autentikasi Laravel Breeze.
+
+### Manajemen Produk
+
+Modul produk tersedia di halaman `/products` dan dapat digunakan oleh pengguna yang sudah login.
+
+- Menampilkan daftar produk.
+- Menambahkan produk baru.
+- Mengubah data produk langsung dari tabel.
+- Menghapus produk.
+- Validasi SKU agar bersifat unik.
+- Pengelolaan nama produk, harga, stok, dan deskripsi.
+- Pencarian, pengurutan, pagination, dan pengaturan jumlah data per halaman menggunakan DataTables.
+- Export data menggunakan DataTables Buttons Extension ke:
+    - Copy
+    - CSV
+    - Excel
+    - Print
+
+### Purchase Order
+
+Modul Purchase Order dilindungi oleh autentikasi dan permission `manage-purchase`.
+
+- Melihat daftar Purchase Order.
+- Membuat Purchase Order baru.
+- Memilih vendor.
+- Menambahkan beberapa detail barang dalam satu Purchase Order.
+- Menyimpan kuantitas, harga unit, dan total harga setiap barang.
+- Melihat detail Purchase Order beserta vendor dan itemnya.
+- Penyimpanan header dan detail transaksi menggunakan database transaction.
+
+### Role dan Permission
+
+Proyek menggunakan `spatie/laravel-permission` untuk membatasi akses fitur.
+
+Permission yang tersedia:
+
+- `manage-master`
+- `manage-purchase`
+- `manage-sales`
+
+Role yang disediakan oleh `RolePermissionSeeder`:
+
+- `Admin`: memiliki semua permission.
+- `Purchasing`: memiliki permission `manage-master` dan `manage-purchase`.
+
+## Teknologi
+
+- PHP 8.2 atau lebih baru
+- Laravel 12
+- MySQL
+- Blade Template Engine
+- Laravel Breeze
+- Tailwind CSS
+- Vite
+- Alpine.js
+- DataTables 2
+- DataTables Buttons Extension
+- Spatie Laravel Permission
+
+## Persyaratan Sistem
+
+Pastikan perangkat sudah memiliki:
+
+- PHP 8.2+
+- Composer
+- Node.js dan npm
+- MySQL atau MariaDB
+- Web server lokal seperti XAMPP, Laragon, atau PHP Artisan Server
+
+## Instalasi
+
+1. Masuk ke folder proyek:
+
+    ```bash
+    cd sales
+    ```
+
+2. Install dependency PHP:
+
+    ```bash
+    composer install
+    ```
+
+3. Install dependency frontend:
+
+    ```bash
+    npm install
+    ```
+
+4. Buat file environment:
+
+    ```bash
+    copy .env.example .env
+    ```
+
+    Pada Linux atau macOS, gunakan `cp .env.example .env`.
+
+5. Generate application key:
+
+    ```bash
+    php artisan key:generate
+    ```
+
+6. Buat database MySQL, kemudian sesuaikan konfigurasi berikut di `.env`:
+
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=db_sales
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+
+7. Jalankan migration:
+
+    ```bash
+    php artisan migrate
+    ```
+
+8. Isi data permission, role, dan produk dummy:
+
+    ```bash
+    php artisan db:seed --class=RolePermissionSeeder
+    php artisan db:seed --class=ProductSeeder
+    ```
+
+    Seeder produk dapat dijalankan berulang kali karena menggunakan SKU sebagai kunci unik.
+
+9. Build asset frontend:
+
+    ```bash
+    npm run build
+    ```
+
+10. Jalankan aplikasi:
+
+    ```bash
+    php artisan serve
+    ```
+
+    Buka `http://127.0.0.1:8000` di browser.
+
+    Untuk pengembangan frontend dengan hot reload, gunakan terminal lain:
+
+    ```bash
+    npm run dev
+    ```
+
+## Route Utama
+
+| Method | URL                      | Keterangan            | Akses                         |
+| ------ | ------------------------ | --------------------- | ----------------------------- |
+| GET    | `/`                      | Halaman awal          | Publik                        |
+| GET    | `/dashboard`             | Dashboard             | Login dan email terverifikasi |
+| GET    | `/products`              | Daftar produk         | Login                         |
+| POST   | `/products`              | Tambah produk         | Login                         |
+| PUT    | `/products/{product}`    | Perbarui produk       | Login                         |
+| DELETE | `/products/{product}`    | Hapus produk          | Login                         |
+| GET    | `/purchase-order`        | Daftar Purchase Order | Login dan `manage-purchase`   |
+| GET    | `/purchase-order/create` | Form Purchase Order   | Login dan `manage-purchase`   |
+| POST   | `/purchase-order`        | Simpan Purchase Order | Login dan `manage-purchase`   |
+| GET    | `/purchase-order/{id}`   | Detail Purchase Order | Login dan `manage-purchase`   |
+
+## Struktur Folder Penting
+
+```text
+app/
+├── Http/Controllers/
+│   ├── ProductsController.php
+│   └── PurchaseOrderController.php
+└── Models/
+	 └── Product.php
+
+database/
+├── migrations/
+│   └── *_create_products_table.php
+└── seeders/
+	 ├── ProductSeeder.php
+	 └── RolePermissionSeeder.php
+
+resources/views/
+├── products/index.blade.php
+└── purchasing/
+
+routes/
+└── web.php
+```
+
+## Struktur Tabel Products
+
+| Kolom         | Tipe             | Keterangan       |
+| ------------- | ---------------- | ---------------- |
+| `id`          | bigint           | Primary key      |
+| `sku`         | varchar          | Kode produk unik |
+| `name`        | varchar          | Nama produk      |
+| `price`       | decimal          | Harga produk     |
+| `stock`       | unsigned integer | Jumlah stok      |
+| `description` | text nullable    | Deskripsi produk |
+| `created_at`  | timestamp        | Waktu dibuat     |
+| `updated_at`  | timestamp        | Waktu diperbarui |
+
+## Pengujian
+
+Jalankan test dengan perintah:
+
+```bash
+php artisan test
+```
+
+## Lisensi
+
+Proyek ini menggunakan framework Laravel yang dirilis di bawah lisensi MIT.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
