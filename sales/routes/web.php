@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,13 @@ Route::middleware(['auth', 'permission:manage-purchase'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.index');
+    Route::get('/categories/data', [CategoriesController::class, 'data'])->name('categories.data');
+    Route::post('/categories', [CategoriesController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{category}', [CategoriesController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
     Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+    Route::get('/products/data', [ProductsController::class, 'data'])->name('products.data');
     Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');

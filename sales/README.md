@@ -28,6 +28,18 @@ Modul produk tersedia di halaman `/products` dan dapat digunakan oleh pengguna y
     - Excel
     - Print
 
+### Manajemen Kategori
+
+Modul kategori tersedia di halaman `/categories` dan menjadi master untuk data produk.
+
+- CRUD kategori: tambah, ubah, dan hapus.
+- DataTables server-side dengan pencarian, sorting, dan pagination.
+- DataTables Buttons Extension untuk Copy, CSV, Excel, dan Print.
+- Validasi nama kategori agar unik.
+- Relasi `Category hasMany Product` dan `Product belongsTo Category`.
+- Dropdown kategori pada form tambah dan edit Product.
+- Product DataTables menampilkan nama kategori melalui `LEFT JOIN`.
+
 ### Purchase Order
 
 Modul Purchase Order dilindungi oleh autentikasi dan permission `manage-purchase`.
@@ -68,6 +80,8 @@ Role yang disediakan oleh `RolePermissionSeeder`:
 - DataTables 2
 - DataTables Buttons Extension
 - Spatie Laravel Permission
+
+Catatan prompt, review kode, debugging, dan refactoring AI tersedia di [AI_REVIEW.md](AI_REVIEW.md).
 
 ## Persyaratan Sistem
 
@@ -169,6 +183,11 @@ Pastikan perangkat sudah memiliki:
 | POST   | `/products`              | Tambah produk         | Login                         |
 | PUT    | `/products/{product}`    | Perbarui produk       | Login                         |
 | DELETE | `/products/{product}`    | Hapus produk          | Login                         |
+| GET    | `/categories`            | Daftar kategori       | Login                         |
+| GET    | `/categories/data`       | DataTables kategori   | Login                         |
+| POST   | `/categories`            | Tambah kategori       | Login                         |
+| PUT    | `/categories/{category}` | Perbarui kategori     | Login                         |
+| DELETE | `/categories/{category}` | Hapus kategori        | Login                         |
 | GET    | `/purchase-order`        | Daftar Purchase Order | Login dan `manage-purchase`   |
 | GET    | `/purchase-order/create` | Form Purchase Order   | Login dan `manage-purchase`   |
 | POST   | `/purchase-order`        | Simpan Purchase Order | Login dan `manage-purchase`   |
@@ -179,19 +198,25 @@ Pastikan perangkat sudah memiliki:
 ```text
 app/
 ├── Http/Controllers/
+│   ├── CategoriesController.php
 │   ├── ProductsController.php
 │   └── PurchaseOrderController.php
 └── Models/
-	 └── Product.php
+    ├── Category.php
+    └── Product.php
 
 database/
 ├── migrations/
+│   ├── *_create_categories_table.php
+│   ├── *_add_category_id_to_products_table.php
 │   └── *_create_products_table.php
 └── seeders/
-	 ├── ProductSeeder.php
-	 └── RolePermissionSeeder.php
+    ├── CategorySeeder.php
+    ├── ProductSeeder.php
+    └── RolePermissionSeeder.php
 
 resources/views/
+├── categories/index.blade.php
 ├── products/index.blade.php
 └── purchasing/
 
@@ -211,6 +236,18 @@ routes/
 | `description` | text nullable    | Deskripsi produk |
 | `created_at`  | timestamp        | Waktu dibuat     |
 | `updated_at`  | timestamp        | Waktu diperbarui |
+
+Kolom `products.category_id` adalah foreign key nullable ke `categories.id`. Jika kategori dihapus, produk tetap ada dan `category_id` menjadi `null`.
+
+## Struktur Tabel Categories
+
+| Kolom         | Tipe          | Keterangan         |
+| ------------- | ------------- | ------------------ |
+| `id`          | bigint        | Primary key        |
+| `name`        | varchar       | Nama kategori unik |
+| `description` | text nullable | Deskripsi kategori |
+| `created_at`  | timestamp     | Waktu dibuat       |
+| `updated_at`  | timestamp     | Waktu diperbarui   |
 
 ## Pengujian
 
