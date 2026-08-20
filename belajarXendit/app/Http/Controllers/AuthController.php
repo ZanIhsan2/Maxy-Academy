@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facedas\Hash;
+use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -22,6 +22,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        
         return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
     }
 
@@ -30,7 +31,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth('api')->attempt($credentials)){
-            return response()->json(['message' => 'invalid Credentials'], 401);
+            return response()->json(['message' => 'Invalid Credentials'], 401);
         }
 
         return response()->json([
