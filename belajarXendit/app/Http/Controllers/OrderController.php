@@ -12,7 +12,7 @@ class OrderController extends Controller
     public function store (Request $request)
     {
         $request->validate([
-            'event_id' => 'required|exist:events_id',
+            'event_id' => 'required|exists:events,id',
         ]);
 
         $user = auth()->user();
@@ -50,6 +50,6 @@ class OrderController extends Controller
 
     public function myOrders()
     {
-        return auth()->user()->orders->with('event')->get();
+        return auth('api')->user()->orders()->with('event')->get();
     }
 }
