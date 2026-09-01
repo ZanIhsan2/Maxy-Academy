@@ -11,7 +11,9 @@ const puppeteer = require("puppeteer");
     });
 
     const page = await browser.newPage();
-    await page.goto("https://github.com/ZanIhsan2", { waitUntil: "domcontentloaded" });
+    await page.goto("https://github.com/ZanIhsan2", {
+      waitUntil: "domcontentloaded",
+    });
     await page.waitForSelector("h1");
 
     const screenshotPath = path.join(__dirname, "screenshot.png");

@@ -1,29 +1,27 @@
-# Discord Puppeteer Automation
+# Puppeteer Tasks
 
-Automation ini membuka Discord, memakai sesi browser yang tersimpan, lalu masuk ke channel dari `DISCORD_CHANNEL_URL`.
+Folder ini berisi tiga tugas terpisah:
+
+- `dc.js` dan `discord-runner.js`: login Discord dan membuka channel.
+- `index.js`: screenshot otomatis halaman website.
+- `farmrpg.js`: memasang session cookie FarmRPG dan menjalankan satu aksi.
 
 ## Menjalankan
 
-1. Salin `.env.example` menjadi `.env`, lalu isi nilai sebenarnya. `SERVER_ID` dan `CHANNEL_ID` harus berupa ID dari URL channel, bukan nama server/channel:
+Salin `.env.example` menjadi `.env`, lalu isi nilai sebenarnya. Jangan membagikan atau commit `.env` karena berisi kredensial dan session cookie.
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Contoh isi `.env`:
-
-```env
-DISCORD_EMAIL=email-anda@example.com
-DISCORD_PASSWORD=password-anda
-DISCORD_CHANNEL_URL=https://discord.com/channels/123456789012345678/987654321098765432
-```
-
-2. Jalankan dari folder ini:
+Jalankan dari folder ini:
 
 ```powershell
-npm run start
+npm run start:screenshot
+npm run start:discord
+npm run start:farm
 ```
 
-`SERVER_ID` dan `CHANNEL_ID` diambil dari URL channel Discord. Profil login disimpan di folder `.discord-profile`, sehingga login berikutnya biasanya tidak perlu mengisi kredensial lagi.
+`npm run start` tetap menjalankan tugas screenshot. Untuk FarmRPG, isi cookie session akun milik sendiri dan pilih `FARM_ACTION_SELECTOR` atau `FARM_ACTION_URL` untuk aksi.
 
-Jika akun memakai 2FA atau Discord menampilkan CAPTCHA, selesaikan secara manual pada browser yang terbuka dalam batas waktu 120 detik. Jangan menyimpan password langsung di source code.
+Jika Discord meminta 2FA atau CAPTCHA, selesaikan secara manual pada browser yang terbuka.

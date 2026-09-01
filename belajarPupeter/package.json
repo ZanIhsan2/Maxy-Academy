@@ -1,7 +1,10 @@
 {
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "start:screenshot": "node index.js",
+    "start:discord": "node discord-runner.js",
+    "start:farm": "node farmrpg.js"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
