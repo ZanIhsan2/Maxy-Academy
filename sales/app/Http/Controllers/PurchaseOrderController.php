@@ -8,6 +8,7 @@ use App\Models\PurchaseOrder;
 use App\Models\DetailPurchaseOrder;
 use App\Models\MVendor;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class PurchaseOrderController extends Controller
@@ -17,7 +18,10 @@ class PurchaseOrderController extends Controller
      */
     public function index()
     {
-        $purchaseOrders = PurchaseOrder::with('vendor')->latest()->get();
+        $purchaseOrders = PurchaseOrder::with('vendor')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
 
         return view('purchasing.index', compact('purchaseOrders'));
     }
@@ -42,6 +46,7 @@ class PurchaseOrderController extends Controller
         try {
             // 1. Simpan Header Purchase Order
             $purchaseOrder = PurchaseOrder::create([
+                'user_id' => Auth::id(),
                 'no_order' => $request->no_order,
                 'tanggal_dibutuhkan' => $request->tanggal_dibutuhkan,
                 'm_vendor_id1' => $request->m_vendor_id1,
@@ -72,6 +77,11 @@ class PurchaseOrderController extends Controller
     public function show($id)
     {
         $po = PurchaseOrder::with(['vendor', 'details'])->findOrFail($id);
+
+        if ((int) $po->user_id !== (int) Auth::id()) {
+            abort(403, 'Anda tidak memiliki izin untuk mengakses purchase order ini.');
+        }
+
         return view('purchasing.show', compact('po'));
     }
 }

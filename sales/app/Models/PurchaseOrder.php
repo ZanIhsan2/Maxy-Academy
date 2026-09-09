@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class PurchaseOrder extends Model
 {
     protected $table = 'm_purchase_order';
-    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'user_id',
+        'no_order',
+        'tanggal_dibutuhkan',
+        'm_vendor_id1',
+    ];
 
     // Relasi ke Vendor
     public function vendor()
