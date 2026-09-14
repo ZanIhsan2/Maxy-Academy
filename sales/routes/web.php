@@ -11,7 +11,28 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $stats = [
+        'products' => \App\Models\Product::count(),
+        'categories' => \App\Models\Category::count(),
+        'stock' => \App\Models\Product::sum('stock') ?? 0,
+        'inventory_value' => (float) (\App\Models\Product::query()
+            ->selectRaw('SUM(price * stock) as total_value')
+            ->value('total_value') ?? 0),
+        'low_stock_products' => \App\Models\Product::where('stock', '<', 10)->count(),
+        'average_price' => \App\Models\Product::avg('price') ?? 0,
+    ];
+
+    $recentProducts = \App\Models\Product::with('category')
+        ->latest()
+        ->take(5)
+        ->get();
+
+    $categorySummary = \App\Models\Category::withCount('products')
+        ->orderByDesc('products_count')
+        ->take(5)
+        ->get();
+
+    return view('dashboard', compact('stats', 'recentProducts', 'categorySummary'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
